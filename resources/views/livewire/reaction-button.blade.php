@@ -1,4 +1,4 @@
-<div>
+<div class="reaction-buttons">
     @push('styles')
         <link rel="stylesheet" href="{{ asset('vendor/reactions/css/reactions.css') }}">
     @endpush
