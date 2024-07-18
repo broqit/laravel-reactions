@@ -3,6 +3,8 @@
 namespace Broqit\Laravel\Reactions;
 
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
+use Broqit\Laravel\Reactions\Http\Livewire\ReactionButton;
 
 class ReactionsServiceProvider extends ServiceProvider
 {
@@ -27,5 +29,7 @@ class ReactionsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/reactions'),
         ], 'views');
+
+        Livewire::component('reaction-button', ReactionButton::class);
     }
 }
