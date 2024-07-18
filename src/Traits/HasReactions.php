@@ -53,7 +53,7 @@ trait HasReactions
         ]);
     }
 
-    public function removeReaction($type)
+    public function removeReaction($type): void
     {
         $userId = Auth::check() ? Auth::id() : null;
         $guestId = !Auth::check() ? request()->ip() : null;
@@ -70,5 +70,42 @@ trait HasReactions
         }
 
         $query->delete();
+    }
+
+    /**
+     * Get the total count of reactions for the model.
+     *
+     * @return int
+     */
+    public function getTotalReactionsCount(): int
+    {
+        return $this->reactions()->count();
+    }
+
+    /**
+     * Get the count of a specific type of reaction for the model.
+     *
+     * @param string $type
+     * @return int
+     */
+    public function getReactionsCountByType(string $type): int
+    {
+        return $this->reactions()->where('type', $type)->count();
+    }
+
+    /**
+     * Get the count of all reactions for the model grouped by type.
+     *
+     * @return array
+     */
+    public function getReactionsCountGroupedByType(): array
+    {
+        return $this->reactions()
+            ->select('type')
+            ->selectRaw('count(*) as count')
+            ->groupBy('type')
+            ->get()
+            ->pluck('count', 'type')
+            ->toArray();
     }
 }

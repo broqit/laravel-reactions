@@ -57,3 +57,18 @@ Add the Livewire component to your view:
 ```bladehtml
 <livewire:reaction-button :model="$post" />
 ```
+
+// Get all reactions count for record
+```php
+$totalReactions = $post->getTotalReactionsCount();
+```
+
+// Get the number of 'like' reactions for a record
+```php
+$likeReactions = $post->getReactionsCountByType('like');
+```
+
+// Get the count of all reactions for a record, grouped by type
+```php
+$groupedReactions = $post->getReactionsCountGroupedByType();
+```
