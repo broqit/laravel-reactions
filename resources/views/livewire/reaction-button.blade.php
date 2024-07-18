@@ -6,7 +6,7 @@
     @foreach($reactions as $reaction)
         <button class="reaction-button @if(in_array($reaction['type'], $currentReactions, true)) selected @endif" wire:click="react('{{ $reaction['type'] }}')">
             {!! $reaction['icon'] !!} {{ $reaction['name'] }}
-            @if($reactionCounts[$reaction['type']])
+            @if(!empty($reactionCounts[$reaction['type']]))
             <span>{{ $reactionCounts[$reaction['type']]}}</span>
             @endif
         </button>
