@@ -4,9 +4,11 @@
     @endpush
 
     @foreach($reactions as $reaction)
-        <button class="reaction-button @if(in_array($reaction['type'], $currentReactions)) selected @endif" wire:click="react('{{ $reaction['type'] }}')">
+        <button class="reaction-button @if(in_array($reaction['type'], $currentReactions, true)) selected @endif" wire:click="react('{{ $reaction['type'] }}')">
             {!! $reaction['icon'] !!} {{ $reaction['name'] }}
-            <span>{{ $reactionCounts[$reaction['type']] ?? 0 }}</span>
+            @if($reactionCounts[$reaction['type']])
+            <span>{{ $reactionCounts[$reaction['type']]}}</span>
+            @endif
         </button>
     @endforeach
 </div>
