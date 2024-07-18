@@ -18,12 +18,15 @@ class ReactionButton extends Component
         $this->model = $model;
         $this->reactions = config('reactions.types');
         $this->allowedUsers = config('reactions.allowed_users');
-        $this->currentReaction = $this->model->reactions()->where('user_id', Auth::check() ? Auth::id() : request()->ip())->first();
-        $this->reactionCounts = $this->model->reactions()
-            ->select('type', \DB::raw('count(*) as count'))
-            ->groupBy('type')
-            ->pluck('count', 'type')
-            ->toArray();
+        $this->currentReaction = $this->model->reactions()
+            ->when(Auth::check(), function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->when(!Auth::check(), function ($query) {
+                $query->where('guest_id', request()->ip());
+            })
+            ->first();
+        $this->updateReactionCounts();
     }
 
     public function react($type)
@@ -33,16 +36,27 @@ class ReactionButton extends Component
         }
 
         $this->model->react($type);
-        $this->currentReaction = $this->model->reactions()->where('user_id', Auth::check() ? Auth::id() : request()->ip())->first();
+        $this->currentReaction = $this->model->reactions()
+            ->when(Auth::check(), function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->when(!Auth::check(), function ($query) {
+                $query->where('guest_id', request()->ip());
+            })
+            ->first();
         $this->updateReactionCounts();
     }
 
     public function updateReactionCounts()
     {
         $this->reactionCounts = $this->model->reactions()
-            ->select('type', \DB::raw('count(*) as count'))
+            ->select('type')
+            ->selectRaw('count(*) as count')
             ->groupBy('type')
-            ->pluck('count', 'type')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item['type'] => $item['count']];
+            })
             ->toArray();
     }
 

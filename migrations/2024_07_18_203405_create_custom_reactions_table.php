@@ -11,7 +11,8 @@ class CreateCustomReactionsTable extends Migration
         Schema::create(config('reactions.table_name', 'custom_reactions'), function (Blueprint $table) {
             $table->id();
             $table->morphs('reactable');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('guest_id')->nullable(); // Додаємо колонку для ідентифікації гостей
             $table->string('type');
             $table->timestamps();
         });

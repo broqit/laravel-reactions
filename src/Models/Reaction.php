@@ -15,7 +15,7 @@ class Reaction extends Model
         $this->setTable(config('reactions.table_name', 'custom_reactions'));
     }
 
-    protected $fillable = ['user_id', 'type'];
+    protected $fillable = ['user_id', 'guest_id', 'type'];
 
     public function reactable()
     {
