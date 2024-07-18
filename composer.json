@@ -1,0 +1,24 @@
+{
+    "name": "broqit/laravel-reactions",
+    "description": "Laravel Reactions Package",
+    "type": "library",
+    "require": {
+        "php": "^7.4|^8.0",
+        "livewire/livewire": "^2.0|^3.0",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Broqit\\Reactions\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Broqit\\Laravel\\Reactions\\ReactionsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
