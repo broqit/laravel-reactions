@@ -9,6 +9,12 @@ class Reaction extends Model
 {
     use HasFactory;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->setTable(config('reactions.table_name', 'custom_reactions'));
+    }
+
     protected $fillable = ['user_id', 'type'];
 
     public function reactable()

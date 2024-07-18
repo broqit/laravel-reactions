@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReactionsTable extends Migration
+class CreateCustomReactionsTable extends Migration
 {
     public function up()
     {
-        Schema::create('reactions', function (Blueprint $table) {
+        Schema::create(config('reactions.table_name', 'custom_reactions'), function (Blueprint $table) {
             $table->id();
             $table->morphs('reactable');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -19,6 +19,6 @@ class CreateReactionsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('reactions');
+        Schema::dropIfExists(config('reactions.table_name', 'custom_reactions'));
     }
 }

@@ -48,6 +48,6 @@ class ReactionButton extends Component
 
     public function render()
     {
-        return view('livewire.reaction-button');
+        return view('reactions::livewire.reaction-button');
     }
 }

@@ -20,6 +20,11 @@ Run database migrations:
 php artisan migrate
 ```
 
+## Vendor publishing
+```bash
+php artisan vendor:publish --provider="Broqit\Laravel\Reactions\ReactionsServiceProvider"
+```
+
 ## Configuration
 You can optionally publish the config file with:
 
