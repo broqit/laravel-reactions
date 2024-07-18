@@ -4,6 +4,7 @@ namespace Broqit\Laravel\Reactions\Traits;
 
 use Broqit\Laravel\Reactions\Models\Reaction;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 trait HasReactions
 {
@@ -45,32 +46,29 @@ trait HasReactions
             return;
         }
 
-        $reaction = $this->reactions()->when($userId, function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->when($guestId, function ($query) use ($guestId) {
-            $query->where('guest_id', $guestId);
-        })->first();
-
-        if ($reaction) {
-            $reaction->update(['type' => $type]);
-        } else {
-            $this->reactions()->create([
-                'user_id' => $userId,
-                'guest_id' => $guestId,
-                'type' => $type,
-            ]);
-        }
+        $this->reactions()->create([
+            'user_id' => $userId,
+            'guest_id' => $guestId,
+            'type' => $type,
+        ]);
     }
 
-    public function removeReaction()
+    public function removeReaction($type)
     {
         $userId = Auth::check() ? Auth::id() : null;
         $guestId = !Auth::check() ? request()->ip() : null;
+        $removalWindowHours = config('reactions.removal_window_hours', null);
 
-        $this->reactions()->when($userId, function ($query) use ($userId) {
+        $query = $this->reactions()->when($userId, function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->when($guestId, function ($query) use ($guestId) {
             $query->where('guest_id', $guestId);
-        })->delete();
+        })->where('type', $type);
+
+        if (!is_null($removalWindowHours)) {
+            $query->where('created_at', '>=', Carbon::now()->subHours($removalWindowHours));
+        }
+
+        $query->delete();
     }
 }

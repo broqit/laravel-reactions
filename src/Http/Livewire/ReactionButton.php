@@ -9,23 +9,28 @@ class ReactionButton extends Component
 {
     public $model;
     public $reactions;
-    public $currentReaction;
+    public $currentReactions;
     public $allowedUsers;
     public $reactionCounts;
+    public $removalWindowHours;
+    public $maxReactions;
 
     public function mount($model)
     {
         $this->model = $model;
         $this->reactions = config('reactions.types');
         $this->allowedUsers = config('reactions.allowed_users');
-        $this->currentReaction = $this->model->reactions()
+        $this->removalWindowHours = config('reactions.removal_window_hours');
+        $this->maxReactions = config('reactions.max_reactions_per_user', 1);
+        $this->currentReactions = $this->model->reactions()
             ->when(Auth::check(), function ($query) {
                 $query->where('user_id', Auth::id());
             })
             ->when(!Auth::check(), function ($query) {
                 $query->where('guest_id', request()->ip());
             })
-            ->first();
+            ->pluck('type')
+            ->toArray();
         $this->updateReactionCounts();
     }
 
@@ -35,15 +40,15 @@ class ReactionButton extends Component
             return;
         }
 
-        $this->model->react($type);
-        $this->currentReaction = $this->model->reactions()
-            ->when(Auth::check(), function ($query) {
-                $query->where('user_id', Auth::id());
-            })
-            ->when(!Auth::check(), function ($query) {
-                $query->where('guest_id', request()->ip());
-            })
-            ->first();
+        // Якщо користувач вже обрав цю реакцію, знімаємо її
+        if (in_array($type, $this->currentReactions)) {
+            $this->model->removeReaction($type);
+            $this->currentReactions = array_diff($this->currentReactions, [$type]);
+        } elseif (count($this->currentReactions) < $this->maxReactions) {
+            $this->model->react($type);
+            $this->currentReactions[] = $type;
+        }
+
         $this->updateReactionCounts();
     }
 
@@ -62,6 +67,10 @@ class ReactionButton extends Component
 
     public function render()
     {
-        return view('reactions::livewire.reaction-button');
+        return view('reactions::livewire.reaction-button', [
+            'reactions' => $this->reactions,
+            'currentReactions' => $this->currentReactions,
+            'reactionCounts' => $this->reactionCounts
+        ]);
     }
 }

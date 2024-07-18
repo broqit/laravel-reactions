@@ -1,0 +1,25 @@
+.reaction-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reaction-button:hover {
+    background-color: #f1f1f1;
+}
+
+.reaction-button.selected {
+    background-color: #e0e0e0;
+    border-color: #888;
+}
+
+.reaction-button span {
+    margin-left: 8px;
+    font-weight: bold;
+}

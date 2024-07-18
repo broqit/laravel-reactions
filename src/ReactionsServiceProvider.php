@@ -30,6 +30,10 @@ class ReactionsServiceProvider extends ServiceProvider
             __DIR__.'/../resources/views' => resource_path('views/vendor/reactions'),
         ], 'views');
 
+        $this->publishes([
+            __DIR__.'/../resources/views/css' => public_path('vendor/reactions/css'),
+        ], 'public');
+
         Livewire::component('reaction-button', ReactionButton::class);
     }
 }

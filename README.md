@@ -25,6 +25,11 @@ php artisan migrate
 php artisan vendor:publish --provider="Broqit\Laravel\Reactions\ReactionsServiceProvider"
 ```
 
+## Style publishing
+```bash
+php artisan vendor:publish --provider="Broqit\Laravel\Reactions\ReactionsServiceProvider" --tag="public"
+```
+
 ## Configuration
 You can optionally publish the config file with:
 
