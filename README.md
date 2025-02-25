@@ -83,14 +83,14 @@ class Post extends Model
 Add the Livewire component to your view:
 
 ```bladehtml
-<!-- Default component -->
+<!-- Default styled component -->
 <livewire:reaction-button :model="$post" />
 
-<!-- Tailwind CSS component -->
-<livewire:reaction-button-tw :model="$post" />
+<!-- Tailwind CSS styled component -->
+<livewire:reaction-button :model="$post" style="tailwind" />
 ```
 
-> **Note**: The Tailwind CSS component (`reaction-button-tw`) requires Tailwind CSS to be installed and configured in your project. No additional CSS files are needed for this component.
+> **Note**: The Tailwind styled version requires Tailwind CSS to be installed and configured in your project. No additional CSS files are needed for this variant.
 
 Retrieve reaction counts:
 ```php

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ReactionButton extends Component
 {
+    public $style = 'default'; // default or tailwind
     public $model;
     public $reactions;
     public $currentReactions;
@@ -16,8 +17,9 @@ class ReactionButton extends Component
     public $removalWindowHours;
     public $maxReactions;
 
-    public function mount($model): void
+    public function mount($model, $style = 'default'): void
     {
+        $this->style = $style;
         $this->model = $model;
         $this->reactions = config('reactions.types');
         $this->allowedUsers = config('reactions.allowed_users');
@@ -69,7 +71,11 @@ class ReactionButton extends Component
 
     public function render(): View
     {
-        return view('reactions::livewire.reaction-button', [
+        $view = $this->style === 'tailwind' 
+            ? 'reactions::livewire.reaction-button-tw'
+            : 'reactions::livewire.reaction-button';
+
+        return view($view, [
             'reactions' => $this->reactions,
             'currentReactions' => $this->currentReactions,
             'reactionCounts' => $this->reactionCounts
