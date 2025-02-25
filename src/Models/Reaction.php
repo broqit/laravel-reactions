@@ -4,6 +4,7 @@ namespace Broqit\Laravel\Reactions\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Reaction extends Model
 {
@@ -17,7 +18,7 @@ class Reaction extends Model
 
     protected $fillable = ['user_id', 'guest_id', 'type'];
 
-    public function reactable()
+    public function reactable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 trait HasReactions
 {
-    public static function bootHasReactions()
+    public static function bootHasReactions(): void
     {
         static::deleting(function ($model) {
             $model->reactions()->delete();
@@ -20,17 +20,12 @@ trait HasReactions
         return $this->morphMany(Reaction::class, 'reactable');
     }
 
-    public function react($type)
+    public function react($type): void
     {
         $userId = Auth::check() ? Auth::id() : null;
         $guestId = !Auth::check() ? request()->ip() : null;
         $allowedUsers = config('reactions.allowed_users');
         $maxReactions = config('reactions.max_reactions_per_user', 1);
-        $userModel = config('reactions.user_model', \App\Models\User::class);
-
-        if (is_null($userModel)) {
-            $userModel = \App\Models\User::class;
-        }
 
         if (($allowedUsers === 'user' && !Auth::check()) || ($allowedUsers === 'guest' && Auth::check())) {
             return;

@@ -2,6 +2,7 @@
 
 namespace Broqit\Laravel\Reactions\Http\Livewire;
 
+use Illuminate\View\View;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class ReactionButton extends Component
     public $removalWindowHours;
     public $maxReactions;
 
-    public function mount($model)
+    public function mount($model): void
     {
         $this->model = $model;
         $this->reactions = config('reactions.types');
@@ -31,17 +32,18 @@ class ReactionButton extends Component
             })
             ->pluck('type')
             ->toArray();
+
         $this->updateReactionCounts();
     }
 
-    public function react($type)
+    public function react($type): void
     {
         if (($this->allowedUsers === 'user' && !Auth::check()) || ($this->allowedUsers === 'guest' && Auth::check())) {
             return;
         }
 
-        // Якщо користувач вже обрав цю реакцію, знімаємо її
-        if (in_array($type, $this->currentReactions)) {
+        // If user has already selected this reaction, remove it
+        if (in_array($type, $this->currentReactions, true)) {
             $this->model->removeReaction($type);
             $this->currentReactions = array_diff($this->currentReactions, [$type]);
         } elseif (count($this->currentReactions) < $this->maxReactions) {
@@ -52,7 +54,7 @@ class ReactionButton extends Component
         $this->updateReactionCounts();
     }
 
-    public function updateReactionCounts()
+    public function updateReactionCounts(): void
     {
         $this->reactionCounts = $this->model->reactions()
             ->select('type')
@@ -65,7 +67,7 @@ class ReactionButton extends Component
             ->toArray();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('reactions::livewire.reaction-button', [
             'reactions' => $this->reactions,

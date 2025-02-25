@@ -12,7 +12,7 @@ class CreateCustomReactionsTable extends Migration
             $table->id();
             $table->morphs('reactable');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-            $table->string('guest_id')->nullable(); // Додаємо колонку для ідентифікації гостей
+            $table->string('guest_id')->nullable();
             $table->string('type');
             $table->timestamps();
         });
