@@ -2,51 +2,46 @@ name: Tests
 
 on:
   push:
-    branches: [ master, main ]
   pull_request:
-    branches: [ master, main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
+          # Laravel 10 (PHP 8.1–8.3)
           - php: 8.1
             laravel: 10.*
             testbench: 8.*
-          - php: 8.1
-            laravel: 11.*
-            testbench: 9.*
           - php: 8.2
             laravel: 10.*
             testbench: 8.*
-          - php: 8.2
-            laravel: 11.*
-            testbench: 9.*
-          - php: 8.2
-            laravel: 12.*
-            testbench: 10.*
           - php: 8.3
             laravel: 10.*
             testbench: 8.*
+
+          # Laravel 11 (PHP 8.2–8.4)
+          - php: 8.2
+            laravel: 11.*
+            testbench: 9.*
           - php: 8.3
             laravel: 11.*
             testbench: 9.*
+          - php: 8.4
+            laravel: 11.*
+            testbench: 9.*
+
+          # Laravel 12 (PHP 8.3–8.4)
           - php: 8.3
             laravel: 12.*
             testbench: 10.*
           - php: 8.4
-            laravel: 10.*
-            testbench: 8.*
-          - php: 8.4
-            laravel: 11.*
-            testbench: 9.*
-          - php: 8.4
             laravel: 12.*
             testbench: 10.*
-    
+
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
     steps:
@@ -57,22 +52,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          extensions: mbstring, pdo, sqlite, pdo_sqlite
           coverage: none
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install dependencies
         run: |
-          composer remove orchestra/testbench --no-interaction --dev 2>/dev/null || true
-          composer require "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --with-all-dependencies --prefer-dist
+          composer remove orchestra/testbench --dev || true
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-update
+          composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --with-all-dependencies
+          composer update --prefer-dist --no-interaction
 
-      - name: Execute tests
+      - name: Run tests
         run: vendor/bin/phpunit
-
