@@ -143,3 +143,22 @@ To configure model-specific reactions, add them to the `model_types` array in yo
 ```
 
 When a model has specific reaction types defined, the `ReactionButton` component will automatically use those types. If no model-specific types are defined, it will fall back to the default `types` configuration.
+
+## Testing
+
+To run the tests, first install the development dependencies:
+
+```bash
+composer install --dev
+```
+
+Then run PHPUnit:
+
+```bash
+vendor/bin/phpunit
+```
+
+The test suite includes:
+- Tests for the `HasReactions` trait, including the `getReactionTypes()` method
+- Tests for the `ReactionButton` Livewire component
+- Tests for model-specific reaction types configuration

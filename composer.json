@@ -16,9 +16,18 @@
         "illuminate/support": "^10.0|^11.0|^12.0",
         "nesbot/carbon": "^3.0"
     },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^10.0|^11.0|^12.0"
+    },
     "autoload": {
         "psr-4": {
             "Broqit\\Laravel\\Reactions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Broqit\\Laravel\\Reactions\\Tests\\": "tests/"
         }
     },
     "extra": {
