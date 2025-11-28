@@ -4,6 +4,11 @@ A Laravel plugin that allows users to leave reactions on posts using Livewire, s
 
 ![Laravel Reactions Plugin](https://i.ibb.co/Vtwb6h5/2024-07-18-22-37-49.png)
 
+[![Tests](https://github.com/broqit/laravel-reactions/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/broqit/laravel-reactions/actions/workflows/tests.yaml?query=branch%3Amaster)
+[![Latest Stable Version](https://poser.pugx.org/broqit/laravel-reactions/v/stable)](https://packagist.org/packages/broqit/laravel-reactions)
+[![Total Downloads](https://poser.pugx.org/broqit/laravel-reactions/downloads)](https://packagist.org/packages/broqit/laravel-reactions)
+[![License](https://poser.pugx.org/broqit/laravel-reactions/license)](https://packagist.org/packages/broqit/laravel-reactions)
+
 ## Features
 - Flexible Reaction Types: Define multiple reaction types with custom names and icons through the configuration file.
 - Model-Specific Reaction Types: Configure different reaction sets for different model types (e.g., thumbs up/down for comments, like/love for posts).
