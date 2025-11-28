@@ -103,4 +103,22 @@ trait HasReactions
             ->pluck('count', 'type')
             ->toArray();
     }
+
+    /**
+     * Get the reaction types available for this model.
+     * Returns model-specific types if defined, otherwise returns default types.
+     *
+     * @return array
+     */
+    public function getReactionTypes(): array
+    {
+        $modelClass = get_class($this);
+        $modelTypes = config('reactions.model_types', []);
+
+        if (isset($modelTypes[$modelClass])) {
+            return $modelTypes[$modelClass];
+        }
+
+        return config('reactions.types', []);
+    }
 }

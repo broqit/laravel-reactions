@@ -6,6 +6,7 @@ A Laravel plugin that allows users to leave reactions on posts using Livewire, s
 
 ## Features
 - Flexible Reaction Types: Define multiple reaction types with custom names and icons through the configuration file.
+- Model-Specific Reaction Types: Configure different reaction sets for different model types (e.g., thumbs up/down for comments, like/love for posts).
 - User and Guest Reactions: Allow both authenticated users and guests to leave reactions. Configurable to restrict reactions to only users, only guests, or both.
 - Customizable Reaction Limits: Set the maximum number of reactions a user or guest can leave on a single post through the configuration file.
 - Dynamic Reaction Display: Utilize a Livewire component to dynamically display reaction buttons with real-time updates.
@@ -19,6 +20,7 @@ A Laravel plugin that allows users to leave reactions on posts using Livewire, s
 ### Example configuration for reaction types:
 ```php
 return [
+    // Default reaction types (used when no model-specific types are defined)
     'types' => [
         ['type' => 'like', 'name' => 'Like', 'icon' => '👍'],
         ['type' => 'love', 'name' => 'Love', 'icon' => '❤️'],
@@ -27,6 +29,20 @@ return [
         ['type' => 'sad', 'name' => 'Sad', 'icon' => '😢'],
         ['type' => 'angry', 'name' => 'Angry', 'icon' => '😡'],
     ],
+    
+    // Model-specific reaction types
+    // Define different reaction sets for different model classes
+    'model_types' => [
+        'App\Models\Post' => [
+            ['type' => 'like', 'name' => 'Like', 'icon' => '👍'],
+            ['type' => 'love', 'name' => 'Love', 'icon' => '❤️'],
+        ],
+        'App\Models\Comment' => [
+            ['type' => 'thumbs_up', 'name' => 'Thumbs Up', 'icon' => '👍'],
+            ['type' => 'thumbs_down', 'name' => 'Thumbs Down', 'icon' => '👎'],
+        ],
+    ],
+    
     'allowed_users' => ['user', 'guest'], // Possible values: 'user', 'guest', 'both'
     'max_reactions_per_user' => 1,
     'table_name' => 'custom_reactions', // Table name
@@ -102,4 +118,28 @@ $likeReactions = $post->getReactionsCountByType('like');
 
 // Get the count of all reactions for a post, grouped by type
 $groupedReactions = $post->getReactionsCountGroupedByType();
+
+// Get the available reaction types for a model (returns model-specific types if defined)
+$reactionTypes = $post->getReactionTypes();
 ```
+
+## Model-Specific Reaction Types
+
+You can configure different reaction sets for different model types. This is useful when you want different reactions for different content types (e.g., thumbs up/down for comments, like/love for posts).
+
+To configure model-specific reactions, add them to the `model_types` array in your configuration file:
+
+```php
+'model_types' => [
+    'App\Models\Post' => [
+        ['type' => 'like', 'name' => 'Like', 'icon' => '👍'],
+        ['type' => 'love', 'name' => 'Love', 'icon' => '❤️'],
+    ],
+    'App\Models\Comment' => [
+        ['type' => 'thumbs_up', 'name' => 'Thumbs Up', 'icon' => '👍'],
+        ['type' => 'thumbs_down', 'name' => 'Thumbs Down', 'icon' => '👎'],
+    ],
+],
+```
+
+When a model has specific reaction types defined, the `ReactionButton` component will automatically use those types. If no model-specific types are defined, it will fall back to the default `types` configuration.

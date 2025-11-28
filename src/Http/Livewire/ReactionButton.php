@@ -21,7 +21,7 @@ class ReactionButton extends Component
     {
         $this->style = $style;
         $this->model = $model;
-        $this->reactions = config('reactions.types');
+        $this->reactions = $this->model->getReactionTypes();
         $this->allowedUsers = config('reactions.allowed_users');
         $this->removalWindowHours = config('reactions.removal_window_hours');
         $this->maxReactions = config('reactions.max_reactions_per_user', 1);
