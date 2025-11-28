@@ -13,9 +13,6 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - php: 8.0
-            laravel: 10.*
-            testbench: 8.*
           - php: 8.1
             laravel: 10.*
             testbench: 8.*
@@ -73,8 +70,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+          composer remove orchestra/testbench --no-interaction --dev 2>/dev/null || true
+          composer require "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --with-all-dependencies --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit
