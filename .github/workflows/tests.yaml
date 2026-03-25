@@ -37,7 +37,10 @@ jobs:
             laravel: 11.*
             testbench: 9.*
 
-          # Laravel 12 (PHP 8.3–8.6)
+          # Laravel 12 (PHP 8.2–8.5)
+          - php: 8.2
+            laravel: 12.*
+            testbench: 10.*
           - php: 8.3
             laravel: 12.*
             testbench: 10.*
@@ -47,23 +50,6 @@ jobs:
           - php: 8.5
             laravel: 12.*
             testbench: 10.*
-          - php: 8.6
-            laravel: 12.*
-            testbench: 10.*
-
-          # Laravel 13 (PHP 8.3–8.6)
-          - php: 8.3
-            laravel: 13.*
-            testbench: 11.*
-          - php: 8.4
-            laravel: 13.*
-            testbench: 11.*
-          - php: 8.5
-            laravel: 13.*
-            testbench: 11.*
-          - php: 8.6
-            laravel: 13.*
-            testbench: 11.*
 
           # Laravel 13 (PHP 8.3–8.5)
           - php: 8.3
